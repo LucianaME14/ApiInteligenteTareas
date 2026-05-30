@@ -1,0 +1,21 @@
+Texto,Sentimiento
+"La tarea fue completada correctamente y el sistema funciona bien",Positivo
+"Excelente trabajo del equipo todo salio perfecto",Positivo
+"Muy buena experiencia con la aplicacion",Positivo
+"El proyecto avanza sin problemas",Positivo
+"Gracias por la rapida solucion",Positivo
+"Todo funciona correctamente hoy",Positivo
+"La entrega fue exitosa y a tiempo",Positivo
+"Me encanta como quedo la funcionalidad",Positivo
+"El servidor responde muy bien",Positivo
+"Implementacion clara y sin errores",Positivo
+"El sistema falla constantemente",Negativo
+"Nada funciona y perdi mucho tiempo",Negativo
+"Error grave en produccion",Negativo
+"La aplicacion es muy lenta e inestable",Negativo
+"No puedo guardar las tareas",Negativo
+"Pesima experiencia con el servicio",Negativo
+"El servidor esta caido otra vez",Negativo
+"Muchos bugs en la ultima version",Negativo
+"La tarea no se completo por un error",Negativo
+"Desastre total en el despliegue",Negativo

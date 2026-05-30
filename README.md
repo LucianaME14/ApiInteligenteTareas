@@ -62,3 +62,37 @@ Fuente: `https://jsonplaceholder.typicode.com/todos`
 ```
 
 **Errores:** `404` si el id no existe; `503` si la API externa no responde.
+
+## ML.NET — Análisis de sentimiento (Pregunta 4, Opción A)
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| POST | `/api/ml/sentimiento` | Clasifica un comentario como Positivo o Negativo |
+
+**Request:**
+
+```json
+{
+  "comentario": "La tarea fue completada correctamente y el sistema funciona bien"
+}
+```
+
+**Response:**
+
+```json
+{
+  "comentario": "La tarea fue completada correctamente y el sistema funciona bien",
+  "sentimiento": "Positivo"
+}
+```
+
+### Dataset
+
+Archivo: `ML/Data/sentimiento-data.csv` (columnas `Texto`, `Sentimiento`).
+
+### Modelo ML.NET
+
+- **Tipo:** clasificación de texto (multiclass con 2 etiquetas: Positivo, Negativo).
+- **Algoritmo:** SDCA Maximum Entropy (`Microsoft.ML`).
+- **Entrenamiento:** al iniciar la API, si no existe `ML/ModelsGenerated/sentiment-model.zip`, se entrena desde el CSV y se guarda el modelo.
+- **Predicción:** `SentimentAnalysisService` carga el modelo y expone el endpoint vía `MlController`.
