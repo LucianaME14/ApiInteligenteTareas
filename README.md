@@ -41,3 +41,24 @@ dotnet ef database update
 Combinables: `?estado=Pendiente&prioridad=Alta`
 
 **Errores 400:** estado o prioridad inválidos; `fechaInicio` mayor que `fechaFin`.
+
+## API externa — Pregunta 3
+
+Fuente: `https://jsonplaceholder.typicode.com/todos`
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/tareas-externas` | Lista tareas externas (mapeadas a DTO) |
+| GET | `/api/tareas-externas/{id}` | Una tarea externa por id |
+
+**Respuesta ejemplo:**
+
+```json
+{
+  "externalId": 1,
+  "titulo": "delectus aut autem",
+  "completado": false
+}
+```
+
+**Errores:** `404` si el id no existe; `503` si la API externa no responde.
