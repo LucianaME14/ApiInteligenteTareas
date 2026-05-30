@@ -18,9 +18,27 @@ public class TareasController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TareaResponseDto>>> GetTareas()
+    public async Task<ActionResult<IEnumerable<TareaResponseDto>>> GetTareas([FromQuery] TareaFiltroDto filtro)
     {
-        var tareas = await _context.Tareas
+        var errorFiltro = ValidarFiltros(filtro);
+        if (errorFiltro is not null)
+            return BadRequest(new { mensaje = errorFiltro });
+
+        var query = _context.Tareas.AsQueryable();
+
+        if (Enum.TryParse<EstadoTarea>(filtro.Estado, ignoreCase: true, out var estado))
+            query = query.Where(t => t.Estado == estado);
+
+        if (Enum.TryParse<PrioridadTarea>(filtro.Prioridad, ignoreCase: true, out var prioridad))
+            query = query.Where(t => t.Prioridad == prioridad);
+
+        if (filtro.FechaInicio.HasValue)
+            query = query.Where(t => t.FechaVencimiento >= filtro.FechaInicio.Value.Date);
+
+        if (filtro.FechaFin.HasValue)
+            query = query.Where(t => t.FechaVencimiento <= filtro.FechaFin.Value.Date);
+
+        var tareas = await query
             .OrderByDescending(t => t.FechaCreacion)
             .ToListAsync();
 
@@ -97,6 +115,23 @@ public class TareasController : ControllerBase
         _context.Tareas.Remove(tarea);
         await _context.SaveChangesAsync();
         return NoContent();
+    }
+
+    private static string? ValidarFiltros(TareaFiltroDto filtro)
+    {
+        if (!string.IsNullOrWhiteSpace(filtro.Estado) &&
+            !Enum.TryParse<EstadoTarea>(filtro.Estado, ignoreCase: true, out _))
+            return "El estado no es válido. Valores permitidos: Pendiente, EnProceso, Completada.";
+
+        if (!string.IsNullOrWhiteSpace(filtro.Prioridad) &&
+            !Enum.TryParse<PrioridadTarea>(filtro.Prioridad, ignoreCase: true, out _))
+            return "La prioridad no es válida. Valores permitidos: Baja, Media, Alta.";
+
+        if (filtro.FechaInicio.HasValue && filtro.FechaFin.HasValue &&
+            filtro.FechaInicio.Value.Date > filtro.FechaFin.Value.Date)
+            return "La fecha de inicio no puede ser mayor que la fecha de fin.";
+
+        return null;
     }
 
     private static string? ValidateDto(string titulo, DateTime fechaVencimiento)
