@@ -20,6 +20,8 @@ builder.Services.AddHttpClient<IExternalApiService, ExternalApiService>(client =
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
+builder.Services.AddSingleton<ISentimentAnalysisService, SentimentAnalysisService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
